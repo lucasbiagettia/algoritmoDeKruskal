@@ -118,3 +118,11 @@ void lista (rama* arbol){
         }
     }
 }
+
+arista* sacar_min (rama** cabeza){
+    arista* respuesta;
+    respuesta = &((**cabeza).a);
+    rama** aux = cabeza;
+    *cabeza = (*cabeza)->sig;
+    free(*aux);
+}
