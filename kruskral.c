@@ -78,18 +78,38 @@ int main (){
 
 }
 
-void inserta(int i, int j, int peso, rama** enlace){
+void inserta(int i, int j, int peso, rama** cabeza){
     rama* nuevo = (rama*)malloc(sizeof(rama));
+
     if (nuevo==NULL){
         printf("Error al reservar memorioa\n");
         free(nuevo);
     }
+
     nuevo->a.costo = peso;
     nuevo->a.u = i;
     nuevo->a.v = j;
-    nuevo->sig = (*enlace)->sig;
-    (*enlace)->sig = nuevo;
 
+    if ((*cabeza) == NULL){
+        nuevo->sig = NULL;
+        (*cabeza) = nuevo;
+    }else if ((*cabeza) != NULL){
+
+        rama* aux = *cabeza;
+        rama* anterior;
+
+        if (peso <= (*cabeza)->a.costo){
+            nuevo -> sig = aux;
+            (*cabeza) = nuevo;
+        }else{
+            while ((aux!= NULL) && (peso > aux->a.costo)){
+                anterior = aux;
+                aux = aux->sig;
+            }
+            nuevo->sig = aux;
+            anterior->sig = nuevo;
+        }
+    }
 }
 
 void lista (rama* arbol){
