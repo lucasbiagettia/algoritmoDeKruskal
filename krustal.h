@@ -71,3 +71,50 @@ void combina (tipo_nombre A, tipo nombre B, conjunto_CE * C){
 tipo_nombre encuentra (int x, conjunto_CE * C){
 	return ((C->nombres[x]).nombre_conjunto);
 	}
+
+void inserta(int i, int j, int peso, rama** cabeza){
+    rama* nuevo = (rama*)malloc(sizeof(rama));
+
+    if (nuevo==NULL){
+        printf("Error al reservar memorioa\n");
+        free(nuevo);
+    }
+
+    nuevo->a.costo = peso;
+    nuevo->a.u = i;
+    nuevo->a.v = j;
+
+    if ((*cabeza) == NULL){
+        nuevo->sig = NULL;
+        (*cabeza) = nuevo;
+    }else if ((*cabeza) != NULL){
+
+        rama* aux = *cabeza;
+        rama* anterior;
+
+        if (peso <= (*cabeza)->a.costo){
+            nuevo -> sig = aux;
+            (*cabeza) = nuevo;
+        }else{
+            while ((aux!= NULL) && (peso > aux->a.costo)){
+                anterior = aux;
+                aux = aux->sig;
+            }
+            nuevo->sig = aux;
+            anterior->sig = nuevo;
+        }
+    }
+}
+
+void lista (rama* arbol){
+    if (arbol==NULL){
+        printf ("No hay ninguna arista en el grafo");
+    }
+    else{
+        arbol=arbol->sig;
+        while (arbol!=NULL){
+            printf ("Esta rama une %d con %d y su costo es %d\n", arbol->a.u+1, arbol->a.v+1, arbol->a.costo);
+            arbol=arbol->sig;
+        }
+    }
+}
