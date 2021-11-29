@@ -37,13 +37,13 @@ void inicial            (tipo_nombre, tipo_elemento, conjunto_CE*);
 void combina            (tipo_nombre, tipo_nombre, conjunto_CE*);
 tipo_nombre encuentra   (int ,conjunto_CE*);
 void kruskal            (rama*);
-void inserta            (int ,int ,int ,rama**);                    //Hecha
+void inserta            (int ,int ,int ,rama**);                    //Hecha. Agrega al principio de una lista enlazada
 arista* sacar_min       (rama**);
-void lista              (rama*);
+void lista              (rama*);                                    //Imprime todo el grafo
 
 int main (){
 
-    int M_Costos [VERTICES][VERTICES]; // ya no me gusta cómo está definida esta matriz
+    int M_Costos [VERTICES][VERTICES]; // ya no me gusta cÃ³mo estÃ¡ definida esta matriz
     rama* arbol = (rama*) malloc (sizeof(rama));
     if (arbol==NULL){
         printf ("Error, no se ha podido reservar memoria\n");
@@ -103,19 +103,3 @@ void lista (rama* arbol){
         }
     }
 }
-/*estudiante* agregarFinal (estudiante *cabeza){
-    estudiante* nuevo = crearNodo();
-    if (cabeza == NULL){
-        return nuevo;
-    }
-    else{
-        estudiante* aux = cabeza;
-        while(aux->sig != NULL){
-            aux= aux->sig;
-        }
-        aux->sig = nuevo;
-        nuevo->ant = aux;
-
-        return cabeza;
-    }
-}*/
