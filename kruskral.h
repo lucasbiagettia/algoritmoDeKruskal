@@ -1,3 +1,5 @@
+#define VERTICES 5
+
 typedef int tipo_nombre;
 typedef int tipo_elemento;
 typedef int vertice;
@@ -43,10 +45,10 @@ void inicial (tipo_nombre A, tipo_elemento x, conjunto_CE * C){
 	(C->encabezamientos_conjunto[A]).primer_elemento = x;
 }
 
-void combina (tipo_nombre A, tipo nombre B, conjunto_CE * C){
+void combina (tipo_nombre A, tipo_nombre B, conjunto_CE * C){
 	int i = 1;
-	if ((C->encabezamiento_conjunto[A]).cuenta) > (C<-encabezamiento_conjunto[B]).cuenta)){
-		i = (C->encabezamiento_conjunto[B]).primer_elemento;
+	if (((C->encabezamientos_conjunto[A]).cuenta) > ((C->encabezamientos_conjunto[B]).cuenta)){
+		i = (C->encabezamientos_conjunto[B]).primer_elemento;
 		do{
 			(C->nombres[i]).nombre_conjunto = A;
 			i = (C->nombres[i]).siguiente_elemento;
@@ -56,7 +58,7 @@ void combina (tipo_nombre A, tipo nombre B, conjunto_CE * C){
 		(C->encabezamientos_conjunto[A]).primer_elemento = (C->encabezamientos_conjunto[B]).primer_elemento;
 		(C->encabezamientos_conjunto[A]).cuenta = (C->encabezamientos_conjunto[A]).cuenta + (C->encabezamientos_conjunto[B]).cuenta;
 	} else {
-                i = (C->encabezamiento_conjunto[A]).primer_elemento;
+                i = (C->encabezamientos_conjunto[A]).primer_elemento;
                 do{
                         (C->nombres[i]).nombre_conjunto = B;
                         i = (C->nombres[i]).siguiente_elemento;
@@ -111,8 +113,7 @@ void lista (rama* arbol){
         printf ("No hay ninguna arista en el grafo");
     }
     else{
-        arbol=arbol->sig;
-        while (arbol!=NULL){
+        while (arbol->sig != NULL){
             printf ("Esta rama une %d con %d y su costo es %d\n", arbol->a.u+1, arbol->a.v+1, arbol->a.costo);
             arbol=arbol->sig;
         }
