@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "kruskral.h"
 #define VERTICES 5
 
 typedef int tipo_nombre;
