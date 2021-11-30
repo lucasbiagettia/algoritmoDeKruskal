@@ -3,22 +3,19 @@
 #include <string.h>
 #include "kruskral.h"
 
-
 int main (){
 
     int M_Costos [VERTICES][VERTICES];
-    rama* arbol = (rama*) malloc (sizeof(rama));
-    if (arbol==NULL){
-        printf ("Error, no se ha podido reservar memoria\n");
-        free (arbol);
-    }
+    rama* arbol;
+    
     for (int i=0; i <= VERTICES-1; i++){
-        for ( int j= i+1; j <= VERTICES -1; j ++){
-            printf ("Ingrese costo de lado entre vertices %d y %d:" ,i+1 ,j+1);
+        for ( int j= i+1; j < VERTICES; j++){
+            printf ("Ingrese costo de lado entre vertices %d y %d:" ,i ,j);
             fflush(stdin);
             scanf ("%d", &M_Costos[i][j]);
         }
     }
+	
 
     for (int i=0; i <= VERTICES-1; i++){
         for ( int j= i+1; j <= VERTICES -1; j ++){
@@ -34,8 +31,13 @@ int main (){
             }
         }
     }
+
     lista (arbol);
+    printf("----\n");
+    sacar_min(&arbol);
+    lista(arbol);
     //kruskal (arbol);
+    
     return 0;
 
 }

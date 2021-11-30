@@ -1,5 +1,4 @@
 #define VERTICES 5
-
 typedef int tipo_nombre;
 typedef int tipo_elemento;
 typedef int vertice;
@@ -96,9 +95,9 @@ void inserta(int i, int j, int peso, rama** cabeza){
 
         if (peso <= (*cabeza)->a.costo){
             nuevo -> sig = aux;
-            (*cabeza) = nuevo;
+            *cabeza = nuevo;
         }else{
-            while ((aux!= NULL) && (peso > aux->a.costo)){
+            while ((aux != NULL) && (peso > aux->a.costo)){
                 anterior = aux;
                 aux = aux->sig;
             }
@@ -109,21 +108,17 @@ void inserta(int i, int j, int peso, rama** cabeza){
 }
 
 void lista (rama* arbol){
-    if (arbol==NULL){
-        printf ("No hay ninguna arista en el grafo");
-    }
-    else{
-        while (arbol->sig != NULL){
-            printf ("Esta rama une %d con %d y su costo es %d\n", arbol->a.u+1, arbol->a.v+1, arbol->a.costo);
-            arbol=arbol->sig;
-        }
+	if (arbol != NULL){
+		printf ("Esta rama une %d con %d y su costo es %d\n", arbol->a.u, arbol->a.v, arbol->a.costo);
+		lista(arbol->sig);
     }
 }
 
 arista* sacar_min (rama** cabeza){
     arista* respuesta;
     respuesta = &((**cabeza).a);
-    rama** aux = cabeza;
+    rama* aux = *cabeza;
     *cabeza = (*cabeza)->sig;
-    free(*aux);
+    free(aux); 
+    return respuesta;
 }
