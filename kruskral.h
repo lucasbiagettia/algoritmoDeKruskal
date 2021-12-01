@@ -1,4 +1,4 @@
-#define VERTICES 7 
+#define VERTICES 15
 
 typedef int tipo_nombre;
 typedef int tipo_elemento;
@@ -39,8 +39,11 @@ void sacar_min       (rama**);
 void lista              (rama*);                                    //Imprime todo el grafo
 void imprimeCE          (conjunto_CE*);                             //IMPRIME LA TABLA COMBINA ENCUENTRA
 
+
+
 void imprimeCE (conjunto_CE* C){
     printf("Encabezamiento conjuntos   --------------------   nombres \n");
+    printf("  CUENTA | Primer el ------------------------NombreC - Sig\n");
 
     for (int i=1; i<=VERTICES; i++){
         printf ("|%d | |%d || %d |   --------                 |%d || %d || %d |\n", i, C->encabezamientos_conjunto[i].cuenta, C->encabezamientos_conjunto[i].primer_elemento,i, C->nombres[i].nombre_conjunto ,C->nombres[i].siguiente_elemento );
@@ -63,6 +66,8 @@ void kruskal (rama* cabeza, rama** arbol, conjunto_CE* componentes){
     }
 
     //SI HAY ALGUN ELEMENTO EN LA LISTA DE PRIORIDAD
+    int it = 1;
+
     while (cabeza != NULL){
 
         arista a = cabeza->a;               //Arista toma el valor del primer elemento
@@ -72,17 +77,20 @@ void kruskal (rama* cabeza, rama** arbol, conjunto_CE* componentes){
         tipo_nombre comp_v = a.v;
         comp_u = encuentra(comp_u, componentes);    //comp_u y comp_v toman el valor del conjunto al que pertenecen
         comp_v = encuentra(comp_v, componentes);
+        printf ("Iteraci\242n %d\n",it);
+        it++;
 
         imprimeCE(componentes);
+        printf ("Toma la arista %d %d, costo %d:\n",a.u,a.v,a.costo);
 
-        if (comp_u!=comp_v){                    //si pertenecen a otro conjunto las une con combina()
-    	    combina(a.u, a.v, componentes);
-	    inserta(a.u, a.v, a.costo, arbol); //usa la función inserta pero ahora para armar otra cola con las aristas del arbol
-            printf ("Inserta la arista %d %d:\n",a.u,a.v);
+        if (comp_u != comp_v){                    //si pertenecen a otro conjunto las une con combina()
+    	    combina(comp_u, comp_v, componentes);
+            inserta(a.u, a.v, a.costo, arbol); //usa la función inserta pero ahora para armar otra cola con las aristas del arbol
+            printf ("Inserta la arista %d %d: de los conjuntos %d y %d\n",a.u,a.v, comp_u, comp_v);
         }
-        
+
     }
-    
+
 }
 
 
@@ -174,4 +182,3 @@ void sacar_min (rama** cabeza){
     *cabeza = (*cabeza)->sig;
     free(aux);
 }
-
