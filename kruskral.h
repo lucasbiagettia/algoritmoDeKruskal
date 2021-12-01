@@ -1,4 +1,4 @@
-#define VERTICES 4
+#define VERTICES 7 
 
 typedef int tipo_nombre;
 typedef int tipo_elemento;
@@ -26,8 +26,8 @@ typedef struct _NOMBRE{
 }nombre;
 
 typedef struct _CONJUNTO_CE{
-    nombre nombres [VERTICES];
-    encabezado encabezamientos_conjunto [VERTICES];
+    nombre nombres [VERTICES+1];
+    encabezado encabezamientos_conjunto [VERTICES+1];
 }conjunto_CE;
 
 void inicial            (tipo_nombre, tipo_elemento, conjunto_CE*);
@@ -40,8 +40,9 @@ void lista              (rama*);                                    //Imprime to
 void imprimeCE          (conjunto_CE*);                             //IMPRIME LA TABLA COMBINA ENCUENTRA
 
 void imprimeCE (conjunto_CE* C){
-    printf("Encabezamiento conjuntos   --------   nombres \n");
-    for (int i=0; i<VERTICES; i++){
+    printf("Encabezamiento conjuntos   --------------------   nombres \n");
+
+    for (int i=1; i<=VERTICES; i++){
         printf ("|%d | |%d || %d |   --------                 |%d || %d || %d |\n", i, C->encabezamientos_conjunto[i].cuenta, C->encabezamientos_conjunto[i].primer_elemento,i, C->nombres[i].nombre_conjunto ,C->nombres[i].siguiente_elemento );
 
     }
@@ -49,15 +50,15 @@ void imprimeCE (conjunto_CE* C){
 }
 
 void inicial (tipo_nombre A, tipo_elemento x, conjunto_CE * C){
-	(C->nombres[x]).nombre_conjunto = A+1;                  //Les puse +1, porque sino se entendía que pertenecian al conjunto 0
+	(C->nombres[x]).nombre_conjunto = A;
 	(C->nombres[x]).siguiente_elemento = 0;
 	(C->encabezamientos_conjunto[A]).cuenta = 1;
-	(C->encabezamientos_conjunto[A]).primer_elemento = x+1; //idem arriba, se entedia que arrancaban en 0
+	(C->encabezamientos_conjunto[A]).primer_elemento = x;
 }
 void kruskal (rama* cabeza, rama** arbol, conjunto_CE* componentes){
 
     //INICIALIZA LA TABLA COMBINA_ENCUENTRA
-    for (int i=0; i<VERTICES; i++){
+    for (int i=1; i<=VERTICES; i++){
         inicial (i, i, componentes);
     }
 
@@ -72,45 +73,49 @@ void kruskal (rama* cabeza, rama** arbol, conjunto_CE* componentes){
         comp_u = encuentra(comp_u, componentes);    //comp_u y comp_v toman el valor del conjunto al que pertenecen
         comp_v = encuentra(comp_v, componentes);
 
-
-        //imprimeCE(componentes);
-
+        imprimeCE(componentes);
 
         if (comp_u!=comp_v){                    //si pertenecen a otro conjunto las une con combina()
-            combina(a.u, a.v, componentes);
-            inserta(a.u, a.v, a.costo, arbol); //usa la función inserta pero ahora para armar otra cola con las aristas del arbol
-
-            //printf ("aca inserta\n");
-
-
+    	    combina(a.u, a.v, componentes);
+	    inserta(a.u, a.v, a.costo, arbol); //usa la función inserta pero ahora para armar otra cola con las aristas del arbol
+            printf ("Inserta la arista %d %d:\n",a.u,a.v);
         }
-
-        //printf ("salgo del while\n");
+        
     }
-    //printf("Kruskral llego aqui\n");
+    
 }
+
+
 void combina (tipo_nombre A, tipo_nombre B, conjunto_CE * C){
-	int i = 1;
+	int i;
 	if (((C->encabezamientos_conjunto[A]).cuenta) > ((C->encabezamientos_conjunto[B]).cuenta)){
 		i = (C->encabezamientos_conjunto[B]).primer_elemento;
-		do{
+		while ((C->nombres[i]).siguiente_elemento != 0 ) {
 			(C->nombres[i]).nombre_conjunto = A;
 			i = (C->nombres[i]).siguiente_elemento;
-		} while ((C->nombres[i]).siguiente_elemento != 0 );
-		(C->nombres[i]).nombre_conjunto = A ;
+		}
+		(C->nombres[i]).nombre_conjunto = A;
+		printf("(C->nombres[%d]).siguiente_elemento = (C->encabezamientos_conjunto[%d]).primer_elemento;\n",i,A);
+		printf("sig elemento: %d\n",(C->encabezamientos_conjunto[A]).primer_elemento);
 		(C->nombres[i]).siguiente_elemento = (C->encabezamientos_conjunto[A]).primer_elemento;
 		(C->encabezamientos_conjunto[A]).primer_elemento = (C->encabezamientos_conjunto[B]).primer_elemento;
 		(C->encabezamientos_conjunto[A]).cuenta = (C->encabezamientos_conjunto[A]).cuenta + (C->encabezamientos_conjunto[B]).cuenta;
+		(C->encabezamientos_conjunto[B]).primer_elemento = 0;
+		(C->encabezamientos_conjunto[B]).cuenta = 0;
 	} else {
                 i = (C->encabezamientos_conjunto[A]).primer_elemento;
-                do{
+                while ((C->nombres[i]).siguiente_elemento != 0 ) {
                         (C->nombres[i]).nombre_conjunto = B;
                         i = (C->nombres[i]).siguiente_elemento;
-                } while ((C->nombres[i]).siguiente_elemento != 0 );
+                }
                 (C->nombres[i]).nombre_conjunto = B ;
-                (C->nombres[i]).siguiente_elemento = (C->encabezamientos_conjunto[B]).primer_elemento;
+		printf("(C->nombres[%d]).siguiente_elemento = (C->encabezamientos_conjunto[%d]).primer_elemento;\n",i,B);
+                printf("sig elemento: %d\n",(C->encabezamientos_conjunto[B]).primer_elemento);
+		(C->nombres[i]).siguiente_elemento = (C->encabezamientos_conjunto[B]).primer_elemento;
                 (C->encabezamientos_conjunto[B]).primer_elemento = (C->encabezamientos_conjunto[A]).primer_elemento;
                 (C->encabezamientos_conjunto[B]).cuenta = (C->encabezamientos_conjunto[B]).cuenta + (C->encabezamientos_conjunto[A]).cuenta;
+		(C->encabezamientos_conjunto[A]).primer_elemento = 0;
+		(C->encabezamientos_conjunto[A]).cuenta = 0;
 	}
 }
 
