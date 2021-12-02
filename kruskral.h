@@ -39,14 +39,12 @@ void sacar_min       (rama**);
 void lista              (rama*);                                    //Imprime todo el grafo
 void imprimeCE          (conjunto_CE*);                             //IMPRIME LA TABLA COMBINA ENCUENTRA
 
-
-
 void imprimeCE (conjunto_CE* C){
-    printf("Encabezamiento conjuntos   --------------------   nombres \n");
-    printf("  CUENTA | Primer el ------------------------NombreC - Sig\n");
+    printf("Encabezamiento conjuntos --------------------     nombres \n");
+    printf("     Cuenta || Primer el --------------------    NombreC || Sig\n");
 
     for (int i=1; i<=VERTICES; i++){
-        printf ("|%d | |%d || %d |   --------                 |%d || %d || %d |\n", i, C->encabezamientos_conjunto[i].cuenta, C->encabezamientos_conjunto[i].primer_elemento,i, C->nombres[i].nombre_conjunto ,C->nombres[i].siguiente_elemento );
+        printf ("|%02d |   |%02d || %02d |   ----------------------   |%02d || %02d || %02d |\n", i, C->encabezamientos_conjunto[i].cuenta, C->encabezamientos_conjunto[i].primer_elemento,i, C->nombres[i].nombre_conjunto ,C->nombres[i].siguiente_elemento );
 
     }
 
@@ -58,16 +56,14 @@ void inicial (tipo_nombre A, tipo_elemento x, conjunto_CE * C){
 	(C->encabezamientos_conjunto[A]).cuenta = 1;
 	(C->encabezamientos_conjunto[A]).primer_elemento = x;
 }
-void kruskal (rama* cabeza, rama** arbol, conjunto_CE* componentes){
 
+void kruskal (rama* cabeza, rama** arbol, conjunto_CE* componentes){
     //INICIALIZA LA TABLA COMBINA_ENCUENTRA
     for (int i=1; i<=VERTICES; i++){
         inicial (i, i, componentes);
     }
 
     //SI HAY ALGUN ELEMENTO EN LA LISTA DE PRIORIDAD
-    int it = 1;
-
     while (cabeza != NULL){
 
         arista a = cabeza->a;               //Arista toma el valor del primer elemento
@@ -77,13 +73,12 @@ void kruskal (rama* cabeza, rama** arbol, conjunto_CE* componentes){
         tipo_nombre comp_v = a.v;
         comp_u = encuentra(comp_u, componentes);    //comp_u y comp_v toman el valor del conjunto al que pertenecen
         comp_v = encuentra(comp_v, componentes);
-        printf ("Iteraci\242n %d\n",it);
-        it++;
 
         imprimeCE(componentes);
-        printf ("Toma la arista %d %d, costo %d:\n",a.u,a.v,a.costo);
 
-        if (comp_u != comp_v){                    //si pertenecen a otro conjunto las une con combina()
+        printf ("Toma la arista %d %d, que tiene costo %d...\n",a.u,a.v,a.costo);
+
+        if (comp_u != comp_v){                    //si pertenecen a otro conjunto los combina()
     	    combina(comp_u, comp_v, componentes);
             inserta(a.u, a.v, a.costo, arbol); //usa la función inserta pero ahora para armar otra cola con las aristas del arbol
             printf ("Inserta la arista %d %d: de los conjuntos %d y %d\n",a.u,a.v, comp_u, comp_v);
@@ -95,6 +90,7 @@ void kruskal (rama* cabeza, rama** arbol, conjunto_CE* componentes){
 
 
 void combina (tipo_nombre A, tipo_nombre B, conjunto_CE * C){
+	//Funcion combina conjunto A con B, modifica cuenta de cada conjunto
 	int i;
 	if (((C->encabezamientos_conjunto[A]).cuenta) > ((C->encabezamientos_conjunto[B]).cuenta)){
 		i = (C->encabezamientos_conjunto[B]).primer_elemento;
@@ -103,8 +99,6 @@ void combina (tipo_nombre A, tipo_nombre B, conjunto_CE * C){
 			i = (C->nombres[i]).siguiente_elemento;
 		}
 		(C->nombres[i]).nombre_conjunto = A;
-		printf("(C->nombres[%d]).siguiente_elemento = (C->encabezamientos_conjunto[%d]).primer_elemento;\n",i,A);
-		printf("sig elemento: %d\n",(C->encabezamientos_conjunto[A]).primer_elemento);
 		(C->nombres[i]).siguiente_elemento = (C->encabezamientos_conjunto[A]).primer_elemento;
 		(C->encabezamientos_conjunto[A]).primer_elemento = (C->encabezamientos_conjunto[B]).primer_elemento;
 		(C->encabezamientos_conjunto[A]).cuenta = (C->encabezamientos_conjunto[A]).cuenta + (C->encabezamientos_conjunto[B]).cuenta;
@@ -116,9 +110,7 @@ void combina (tipo_nombre A, tipo_nombre B, conjunto_CE * C){
                         (C->nombres[i]).nombre_conjunto = B;
                         i = (C->nombres[i]).siguiente_elemento;
                 }
-                (C->nombres[i]).nombre_conjunto = B ;
-		printf("(C->nombres[%d]).siguiente_elemento = (C->encabezamientos_conjunto[%d]).primer_elemento;\n",i,B);
-                printf("sig elemento: %d\n",(C->encabezamientos_conjunto[B]).primer_elemento);
+                (C->nombres[i]).nombre_conjunto = B;
 		(C->nombres[i]).siguiente_elemento = (C->encabezamientos_conjunto[B]).primer_elemento;
                 (C->encabezamientos_conjunto[B]).primer_elemento = (C->encabezamientos_conjunto[A]).primer_elemento;
                 (C->encabezamientos_conjunto[B]).cuenta = (C->encabezamientos_conjunto[B]).cuenta + (C->encabezamientos_conjunto[A]).cuenta;
@@ -166,6 +158,7 @@ void inserta(int i, int j, int peso, rama** cabeza){
 }
 
 void lista (rama* cabeza){
+    //imprime las ramas
     if (cabeza==NULL){
         printf ("No hay ninguna arista en el grafo");
     }

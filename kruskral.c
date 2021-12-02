@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include "kruskral.h"
-
 
 int main (){
 
@@ -11,14 +11,26 @@ int main (){
     rama* arbol = NULL;
     conjunto_CE componentes;
 
+    srand(getpid());
+    int opcion = 0;
+
+    do {
+    	printf("Ingrese 1 para ingresar los valores manualmente o 2 para ingresar los valores de forma aleatoria: ");
+        fflush(stdin);
+        scanf ("%d",&opcion);
+    } while ((opcion != 1) && (opcion !=2));
+
+
     for (int i=1; i <= VERTICES; i++){
-        for ( int j= i+1; j <= VERTICES; j++){
+	for ( int j= i+1; j <= VERTICES; j++){
             printf ("Ingrese costo de lado entre vertices %d y %d:" ,i ,j);
             fflush(stdin);
-            //scanf ("%d", &M_Costos[i][j]);
-            M_Costos[i][j] = (rand()%50)+1;
-            printf ("%d", M_Costos[i][j]);
-            printf("\n");
+            if (opcion == 1){
+	    	scanf ("%d", &M_Costos[i][j]);
+	    } else if (opcion == 2) {
+		M_Costos[i][j] = (rand()%50)+1;
+            	printf ("%d \n", M_Costos[i][j]);
+	    }
         }
     }
 
@@ -41,8 +53,7 @@ int main (){
 
 
     kruskal(grafo, &arbol, &componentes);
-    printf("Hizo Kruskral\n");
-
+    printf("Algoritmo de Kruskral finalizado\n");
 
     lista(arbol);
 
